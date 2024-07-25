@@ -2,8 +2,8 @@
 
 
 ## Environments
-- Preview: Preview: https://main--{repo}--{owner}.hlx.page/
-- Live: https://main--{repo}--{owner}.hlx.live/
+- Preview: Preview: https://main--dev-xsc-boilerplate--adobedevxsc.hlx.page/
+- Live: https://main--dev-xsc-boilerplate--adobedevxsc.hlx.live/
 
 ## Installation
 
