@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/adobe/aem-boilerplate#readme",
   "devDependencies": {
+    "@adobe/helix-cli": "^14.24.10",
     "@babel/core": "7.24.4",
     "@babel/eslint-parser": "7.24.1",
+    "@esm-bundle/chai": "4.3.4-fix.0",
+    "@web/test-runner": "0.14.0",
+    "@web/test-runner-commands": "0.6.4",
     "chai": "5.1.0",
     "eslint": "8.57.0",
     "eslint-config-airbnb-base": "15.0.0",

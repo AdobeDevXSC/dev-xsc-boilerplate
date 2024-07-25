@@ -1,5 +1,5 @@
 {
-    "project": "Door Opener Boilerplate",
+    "project": "Dev XSC Boilerplate",
     "plugins": [
         {
             "id": "library",
@@ -24,6 +24,12 @@
             "passConfig": true,
             "environments": ["preview","live","edit"],            
             "includePaths": [ "**.docx**" ]
+        },
+        {
+            "id": "date-preview",
+            "title": "Preview with Date",
+            "environments": [ "dev", "preview" ],
+            "event": "date-preview"
         }
     ]
 }
