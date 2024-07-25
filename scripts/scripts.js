@@ -268,8 +268,8 @@ export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);
-  scheduleSections(main);
   decorateSections(main);
+  scheduleSections(main);
   scheduleBlocks(main);
   decorateBlocks(main);
 }
