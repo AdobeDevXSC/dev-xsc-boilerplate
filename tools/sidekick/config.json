@@ -28,7 +28,7 @@
         {
             "id": "date-preview",
             "title": "Preview with Date",
-            "environments": [ "dev", "preview" ],
+            "environments": ["preview","dev"],
             "event": "date-preview"
         }
     ]
