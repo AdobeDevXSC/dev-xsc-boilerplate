@@ -366,6 +366,7 @@ async function decorateExperimentPill(overlay, options, context) {
         {
           label: '<span style="font-size:2em;line-height:1em">⚙</span>',
           onclick: async () => {
+            // eslint-disable-next-line no-alert
             const key = window.prompt(
               'Please enter your domain key:',
               window.localStorage.getItem(DOMAIN_KEY_NAME) || '',
