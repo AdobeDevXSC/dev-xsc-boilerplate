@@ -335,11 +335,18 @@ async function decorateExperimentPill(overlay, options, context) {
   if (!experiment || !config) {
     return;
   }
+  
+  // Check if the experiment pill already exists
+  if (overlay.querySelector(`.experiment-pill-${config.id}`)) {
+    return;
+  }
+
   // eslint-disable-next-line no-console
   console.log('preview experiment', experiment);
 
   const domainKey = window.localStorage.getItem(DOMAIN_KEY_NAME);
   const conversionName = context.getMetadata('conversion-name') || 'click';
+  
   const pill = createPopupButton(
     `Experiment: ${config.id}`,
     {
@@ -359,7 +366,6 @@ async function decorateExperimentPill(overlay, options, context) {
         {
           label: '<span style="font-size:2em;line-height:1em">⚙</span>',
           onclick: async () => {
-            // eslint-disable-next-line no-alert
             const key = window.prompt(
               'Please enter your domain key:',
               window.localStorage.getItem(DOMAIN_KEY_NAME) || '',
@@ -384,6 +390,10 @@ async function decorateExperimentPill(overlay, options, context) {
     },
     config.variantNames.map((vname) => createVariant(experiment, vname, config, options)),
   );
+
+  // Add a unique class to the pill to track it
+  pill.classList.add(`experiment-pill-${config.id}`);
+
   if (config.run) {
     pill.classList.add(`is-${context.toClassName(config.status)}`);
   }
