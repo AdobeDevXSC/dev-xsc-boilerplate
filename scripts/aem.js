@@ -285,7 +285,9 @@ function sampleRUM(checkpoint, data = {}) {
 	eager = false,
 	breakpoints = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }],
   ) {
-	const url = new URL(src, window.location.href);
+	// temporary fix to resolve bug with images not being displayed due to url error
+	const windowUrl = window.location.ancestorOrigins[0] ? window.location.ancestorOrigins[0] : window.location.href;
+	const url = new URL(src, windowUrl);
 	const picture = document.createElement('picture');
 	const { pathname } = url;
 	const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
