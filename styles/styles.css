@@ -14,17 +14,25 @@
   /* colors */
   --link-color: #035fe6;
   --link-hover-color: #136ff6;
-  --background-color: white;
+
   --light-color: #eee;
   --dark-color: #ccc;
-  --text-color: black;
+  --black: black;
+  --white: white;
+
   --lenovo-red: #e1251b;
+  --mammoth-blue: #0072B2;
+  --mammoth-blue-hover: #00578E;
 
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
+  --lenovo-font: lato, roboto-fallback;
+  --mammoth-heading: itc-lubalin, serif;
+  --mammoth-subheading: trade-gothic-next-condensed, sans-serif;
+  --mammoth-body: trade-gothic-next, sans-serif;
 
   /* body sizes */
   --body-font-size-m: 22px;
