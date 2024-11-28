@@ -151,7 +151,7 @@
 .vertical-scroll .text-block-wrapper > div {
 	height: 415px;
     width: 454px;
-	background-color: var(--light-color);
+	background-color: var(--background-color);
 	padding: 16px;
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -184,7 +184,6 @@
     line-height: 1.75rem;
     text-transform: capitalize;
 	font-weight: 700;
-	font-family: var(--subheading-font-family);
     letter-spacing: 0.0493125rem;
 }
 
