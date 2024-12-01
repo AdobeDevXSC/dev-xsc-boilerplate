@@ -30,8 +30,25 @@
   object-fit: cover;
 }
 
+/* grid-4 */
+.cards.grid-4 > ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 
+/* grid-3 */
+.cards.grid-3 > ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 24px 30px;
+}
 
+/* grid-2 */
+.cards.grid-2 > ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 24px 30px;
+}
 
 /* story card grid */
 .section.cards-container.story-links > .default-content-wrapper h2 {
