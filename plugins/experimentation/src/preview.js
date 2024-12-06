@@ -335,7 +335,7 @@ async function decorateExperimentPill(overlay, options, context) {
   if (!experiment || !config) {
     return;
   }
-  
+
   // Check if the experiment pill already exists
   if (overlay.querySelector(`.experiment-pill-${config.id}`)) {
     return;
@@ -346,7 +346,7 @@ async function decorateExperimentPill(overlay, options, context) {
 
   const domainKey = window.localStorage.getItem(DOMAIN_KEY_NAME);
   const conversionName = context.getMetadata('conversion-name') || 'click';
-  
+
   const pill = createPopupButton(
     `Experiment: ${config.id}`,
     {
