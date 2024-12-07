@@ -21,7 +21,7 @@ export default async function decorate(block) {
   if (isStoryLinks) {
     const blockLinks = block.querySelectorAll('a');
     blockLinks.forEach((link) => {
-      fetchHtml(link);
+      fetchHtml(link, ul);
     });
   }
 
