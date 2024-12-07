@@ -20,10 +20,10 @@
   --white: white;
   --background-color: #fff;
 
+  /* brand colors */
   --lenovo-red: #e1251b; /* need to update variable name */
   --mammoth-blue: #0072B2; /* need to update variable name */
   --mammoth-blue-hover: #00578E; /* need to update variable name */
-
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;

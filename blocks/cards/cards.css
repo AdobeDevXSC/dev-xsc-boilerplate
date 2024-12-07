@@ -54,7 +54,7 @@
 .section.cards-container.story-links > .default-content-wrapper h2 {
 	font-weight: 700;
     font-size: 2.25rem;
-    margin: 0 0 36px 0;
+    margin: 0 0 36px;
 }
 
 .section.cards-container.story-links > .default-content-wrapper p {
@@ -89,7 +89,7 @@
 }
 
 .section.cards-container.story-links .cards ul > li .content-wrapper { 
-	padding: 60px 20px 20px 20px;
+	padding: 60px 20px 20px;
 	position: relative;
 }
 
@@ -105,9 +105,8 @@
     position: absolute;
     right: 0;
     top: 0;
-    display: block;
     text-align: center;
-    background-color: rgba(226, 35, 26, 1);
+    background-color: rgb(226 35 26 / 100%);
     padding: 10px 20px;
 	font-size: 12px;
     font-weight: 600;
@@ -128,10 +127,8 @@
 }
 
 .section.cards-container.story-links .cards ul > li .content-wrapper .buttons-container a {
-	margin: 0;
 	display: inline-block;
 	font-family: var(--lenovo-font);
-	display: inline-block;
 	box-sizing: border-box;
 	text-decoration: none;
 	border: 1px solid transparent;
@@ -148,7 +145,6 @@
 	font-weight: 600;
 	line-height: 1;
 	padding: 12px 22px;
-	display: inline-block;
 	border-radius: 3px;
 }
 
