@@ -1,4 +1,4 @@
-/* global teaser styles */
+/* stylelint-disable no-descending-specificity */
 main .section.teaser-container {
 	padding: 0;
 }
