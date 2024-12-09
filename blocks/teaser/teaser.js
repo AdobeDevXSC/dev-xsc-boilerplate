@@ -17,5 +17,6 @@ export default function decorate(block) {
     }
   }
 
+  window.addEventListener('load', toggleImage());
   isDesktop.addEventListener('change', () => toggleImage());
 }
