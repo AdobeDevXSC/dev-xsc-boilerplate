@@ -50,6 +50,14 @@
   grid-gap: 24px 30px;
 }
 
+@media (width <= 768px) {
+  .cards.grid-4 > ul, 
+  .cards.grid-3 > ul,
+  .cards.grid-2 > ul {
+   grid-template-columns: unset;
+  }
+}
+
 /* story card grid */
 .section.cards-container.story-links > .default-content-wrapper h2 {
 	font-weight: 700;
