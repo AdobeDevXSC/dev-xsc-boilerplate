@@ -7,6 +7,7 @@ import {
   decorateSections,
   decorateBlocks,
   decorateTemplateAndTheme,
+  getMetadata,
   waitForFirstImage,
   loadSection,
   loadSections,
@@ -53,6 +54,366 @@ function buildAutoBlocks(main) {
   }
 }
 
+/* ----------- Add old and custom functions from previous boilerplate below ------------- */
+
+/**
+ * Returns the current timestamp used for scheduling content.
+ */
+export function getTimestamp() {
+  if ((window.location.hostname === 'localhost' || window.location.hostname.endsWith('.hlx.page')) && window.sessionStorage.getItem('preview-date')) {
+    return Date.parse(window.sessionStorage.getItem('preview-date'));
+  }
+  return Date.now();
+}
+
+/**
+   * Determines whether scheduled content with a given date string should be displayed.
+   */
+export function shouldBeDisplayed(date) {
+  const now = getTimestamp();
+
+  const split = date.split('-');
+  if (split.length === 2) {
+    const from = Date.parse(split[0].trim());
+    const to = Date.parse(split[1].trim());
+    return now >= from && now <= to;
+  }
+  if (date !== '') {
+    const from = Date.parse(date.trim());
+    return now >= from;
+  }
+  return false;
+}
+
+/**
+ * to add/remove a template, just add/remove it in the list below
+ */
+const TEMPLATE_LIST = [
+];
+
+/**
+ * Run template specific decoration code.
+ * @param {Element} main The container element
+ */
+async function decorateTemplates(main) {
+  try {
+    const template = getMetadata('template');
+    const templates = TEMPLATE_LIST;
+    if (templates.includes(template)) {
+      const mod = await import(`../templates/${template}/${template}.js`);
+      loadCSS(`${window.hlx.codeBasePath}/templates/${template}/${template}.css`);
+      if (mod.default) {
+        await mod.default(main);
+      }
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Auto Blocking failed', error);
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+function autolinkModals(element) {
+  element.addEventListener('click', async (e) => {
+    const origin = e.target.closest('a');
+
+    if (origin && origin.href && origin.href.includes('/modals/')) {
+      e.preventDefault();
+      const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
+      openModal(origin.href);
+    }
+  });
+}
+
+/**
+ * Remove scheduled blocks that should not be displayed.
+ */
+function scheduleBlocks(main) {
+  const blocks = main.querySelectorAll('div.section > div > div');
+  blocks.forEach((block) => {
+    let date;
+    const rows = block.querySelectorAll(':scope > div');
+    rows.forEach((row) => {
+      const cols = [...row.children];
+      if (cols.length > 1) {
+        if (cols[0].textContent.toLowerCase() === 'date') {
+          date = cols[1].textContent;
+          row.remove();
+        }
+      }
+    });
+    if (date && !shouldBeDisplayed(date)) {
+      block.remove();
+    }
+  });
+}
+
+/**
+   * Remove scheduled sections that should not be displayed.
+   */
+function scheduleSections(main) {
+  const sections = main.querySelectorAll('div.section');
+  sections.forEach((section) => {
+    const { date } = section.dataset;
+    if (date && !shouldBeDisplayed(date)) {
+      section.remove();
+    }
+  });
+}
+
+const tabElementMap = {};
+
+function calculateTabSectionCoordinate(main, lastTabBeginningIndex, targetTabSourceSection) {
+  if (!tabElementMap[lastTabBeginningIndex]) {
+    tabElementMap[lastTabBeginningIndex] = [];
+  }
+  tabElementMap[lastTabBeginningIndex].push(targetTabSourceSection);
+}
+
+function calculateTabSectionCoordinates(main) {
+  let lastTabIndex = -1;
+  let foldedTabsCounter = 0;
+  const mainSections = [...main.childNodes];
+  main
+    .querySelectorAll('div.section[data-tab-title]')
+    .forEach((section) => {
+      const currentSectionIndex = mainSections.indexOf(section);
+
+      if (lastTabIndex < 0 || (currentSectionIndex - foldedTabsCounter) !== lastTabIndex) {
+        // we construct a new tabs component, at the currentSectionIndex
+        lastTabIndex = currentSectionIndex;
+        foldedTabsCounter = 0;
+      }
+
+      foldedTabsCounter += 2;
+      calculateTabSectionCoordinate(main, lastTabIndex, section);
+    });
+}
+
+async function autoBlockTabComponent(main, targetIndex, tabSections) {
+  // the display none will prevent a major CLS penalty.
+  // franklin will remove this once the blocks are loaded.
+  const section = document.createElement('div');
+  section.setAttribute('class', 'section');
+  section.setAttribute('style', 'display:none');
+  section.dataset.sectionStatus = 'loading';
+  const tabsBlock = document.createElement('div');
+  tabsBlock.setAttribute('class', 'tabs');
+
+  const tabContentsWrapper = document.createElement('div');
+  tabContentsWrapper.setAttribute('class', 'contents-wrapper');
+
+  tabsBlock.appendChild(tabContentsWrapper);
+
+  tabSections.forEach((tabSection) => {
+    tabSection.classList.remove('section');
+    tabSection.classList.add('contents');
+    // remove display: none
+    tabContentsWrapper.appendChild(tabSection);
+    tabSection.style.display = null;
+  });
+  main.insertBefore(section, main.childNodes[targetIndex]);
+  section.append(tabsBlock);
+  decorateBlock(tabsBlock);
+  await loadBlock(tabsBlock);
+  // unset display none manually.
+  // somehow in some race conditions it won't be picked up by lib-franklin.
+  // CLS is not affected
+  section.style.display = null;
+}
+
+function aggregateTabSectionsIntoComponents(main) {
+  calculateTabSectionCoordinates(main);
+
+  // when we aggregate tab sections into a tab autoblock, the index get's lower.
+  // say we have 3 tabs starting at index 10, 12 and 14. and then 3 tabs at 18, 20 and 22.
+  // when we fold the first 3 into 1, those will start at index 10. But the other 3 should now
+  // start at 6 instead of 18 because 'removed' 2 sections.
+  let sectionIndexDelta = 0;
+  Object.keys(tabElementMap).map(async (tabComponentIndex) => {
+    const tabSections = tabElementMap[tabComponentIndex];
+    await autoBlockTabComponent(main, tabComponentIndex - sectionIndexDelta, tabSections);
+    sectionIndexDelta = tabSections.length - 1;
+  });
+}
+
+/**
+ * Determine if we are serving content for the block-library, if so don't load the header or footer
+ * @returns {boolean} True if we are loading block library content
+ */
+export function isBlockLibrary() {
+  return window.location.pathname.includes('block-library');
+}
+
+/**
+ * @param {*} element
+ * @param {*} href
+ */
+export function addVideo(element, href) {
+  element.innerHTML = `
+    <video loop muted playsInline>
+      <source data-src="${href}" type="video/mp4" />
+    </video>`;
+  const video = element.querySelector('video');
+  const source = element.querySelector('video > source');
+
+  source.src = source.dataset.src;
+  video.load();
+  video.addEventListener('loadeddata', () => {
+    video.setAttribute('autoplay', true);
+    video.setAttribute('data-loaded', true);
+    video.play();
+  });
+}
+
+export function makeVideo(element, href) {
+  element.innerHTML = `
+    <video loop muted playsInline>
+      <source data-src="${href}" type="video/mp4" />
+    </video>`;
+
+  const video = element.querySelector('video');
+  const source = element.querySelector('video > source');
+
+  source.src = source.dataset.src;
+  video.load();
+
+  video.addEventListener('loadeddata', () => {
+    video.setAttribute('autoplay', true);
+    video.setAttribute('data-loaded', true);
+    video.play();
+  });
+}
+
+/**
+ * Adds the favicon.
+ * @param {string} href The favicon URL
+ */
+export function addFavIcon(href) {
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/svg+xml';
+  link.href = href;
+  const existingLink = document.querySelector('head link[rel="icon"]');
+  if (existingLink) {
+    existingLink.parentElement.replaceChild(link, existingLink);
+  } else {
+    document.getElementsByTagName('head')[0].appendChild(link);
+  }
+}
+
+export async function fetchJson(href) {
+  const url = new URL(href);
+  try {
+    const resp = await fetch(
+      url,
+      {
+        headers: {
+          'Content-Type': 'text/html',
+        },
+        method: 'get',
+        credentials: 'include',
+      },
+    );
+    const error = new Error({
+      code: 500,
+      message: 'login error',
+    });
+    if (resp.redirected) throw (error);
+
+    return resp.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+export function addAnchorLink(elem) {
+  const link = document.createElement('a');
+  link.setAttribute('href', `#${elem.id || ''}`);
+  link.setAttribute('title', `Copy link to "${elem.textContent}" to clipboard`);
+  link.classList.add('anchor-link');
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(link.href);
+    window.location.href = link.href;
+    e.target.classList.add('anchor-link-copied');
+    setTimeout(() => e.target.classList.remove('anchor-link-copied'), 1000);
+  });
+  link.innerHTML = elem.innerHTML;
+  elem.innerHTML = '';
+  elem.append(link);
+}
+
+export async function useGraphQL(query, param) {
+  const configPath = `${window.location.origin}/demo-config.json`;
+  let { data } = await fetchJson(configPath);
+  data = data && data[0];
+  if (!data) {
+    console.log('config not present'); // eslint-disable-line no-console
+    return;
+  }
+  const { origin } = window.location;
+
+  if (origin.includes('.live')) {
+    data['aem-author'] = data['aem-author'].replace('author', data['hlx.live']);
+  } else if (origin.includes('.page')) {
+    data['aem-author'] = data['aem-author'].replace('author', data['hlx.page']);
+  }
+  data['aem-author'] = data['aem-author'].replace(/\/+$/, '');
+  const { pathname } = new URL(query);
+  const url = param ? new URL(`${data['aem-author']}${pathname}${param}`) : new URL(`${data['aem-author']}${pathname}`);
+  const options = data['aem-author'].includes('publish')
+    ? {
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      method: 'get',
+    }
+    : {
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      method: 'get',
+      credentials: 'include',
+    };
+  try {
+    const resp = await fetch(
+      url,
+      options,
+    );
+
+    const error = new Error({
+      code: 500,
+      message: 'login error',
+    });
+
+    if (resp.redirected) throw (error);
+
+    const adventures = await resp.json();
+    const environment = data['aem-author'];
+    return { adventures, environment }; // eslint-disable-line consistent-return
+  } catch (error) {
+    console.log(JSON.stringify(error)); // eslint-disable-line no-console
+  }
+}
+
+export function addElement(type, attributes, values = {}) {
+  const element = document.createElement(type);
+
+  Object.keys(attributes).forEach((attribute) => {
+    element.setAttribute(attribute, attributes[attribute]);
+  });
+
+  Object.keys(values).forEach((val) => {
+    element[val] = values[val];
+  });
+
+  return element;
+}
+
+/* ------------- Experimentation ----------------- */
+
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -65,6 +426,8 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  scheduleSections(main);
+  scheduleBlocks(main);
 }
 
 /**
@@ -75,8 +438,11 @@ async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
+
   if (main) {
+    decorateTemplates(main);
     decorateMain(main);
+    aggregateTabSectionsIntoComponents(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
@@ -108,6 +474,11 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  if (window.location.hostname === 'localhost' || window.location.hostname.endsWith('.hlx.page')) {
+    // Load scheduling sidekick extension
+    import('./scheduling/scheduling.js');
+  }
 }
 
 /**
