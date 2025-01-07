@@ -1,0 +1,30 @@
+.section.story-container {
+	padding-left: 32px;
+	padding-right: 32px;
+}
+
+.block:not(.hero).story h3 {
+    letter-spacing: -0.025em;
+	text-align: center;
+	padding: 0 36px;
+	margin: 0 0 32px;
+}
+
+.block:not(.hero).story p {
+	font-size: 16px;
+	line-height: 1.4em;
+}
+
+.block:not(.hero).story p.button-container > a {
+	background: transparent;
+	border: solid 1px var(--lenovo-red);
+	color: var(--lenovo-red);
+	border-radius: 3px;
+	padding: 14px 22px;
+}
+
+@media(width <= 686px){
+	.block:not(.hero).story h3 {
+		padding: 0 12px;
+	}
+}

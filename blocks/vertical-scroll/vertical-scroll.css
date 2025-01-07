@@ -1,0 +1,400 @@
+/* stylelint-disable no-descending-specificity */
+.section.vertical-scroll-container {
+	position: relative;
+	padding: 0;
+	width: 100%;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+/* pin spacer */
+.section > div.vertical-scroll-wrapper {
+	max-width: unset;
+	order: 0;
+    place-self: auto;
+    grid-area: auto;
+    z-index: auto;
+    float: none;
+    flex-shrink: 1;
+    display: block;
+    margin: 0;
+    inset: 0;
+    position: relative;
+    flex-basis: auto;
+    overflow: visible;
+    box-sizing: border-box;
+
+    /* width: 68%; */
+    height: 4651px;
+    padding: 0 0 3580px;
+}
+
+/* images container */
+.vertical-scroll > div:first-of-type {
+    translate: none;
+    rotate: none;
+    scale: none;
+    inset: 0 auto auto 0;
+    margin: 0 0 0 32%;
+	max-width: 68%;
+    width: 68%;
+    max-height: 1074px;
+    height: 1074px;
+    padding: 0;
+    transform: translate(0, 0);
+	position: relative;
+}
+
+/* images container - fixed */
+.section.vertical-scroll-container.fixed .vertical-scroll > div:first-of-type {
+	translate: none;
+    rotate: none;
+    scale: none;
+    box-sizing: border-box;
+    transform: translate(0, 0);
+	position: fixed;
+	left: 32%;
+    top: 0.0234px;
+    margin: 0;
+	max-width: 68%;
+    width: 68%;
+    max-height: 1074px;
+    height: 1074px;
+}
+
+.section.vertical-scroll-container.unfix {
+	overflow: hidden;
+}
+
+/* images container unfix */
+.section.vertical-scroll-container.unfix .vertical-scroll > div:first-of-type {
+	translate: none;
+    rotate: none;
+    scale: none;
+    inset: 0 auto auto 0;
+    margin: 0 0 0 32%;
+	max-width: 68%;
+    width: 68%;
+    max-height: 1074px;
+    height: 1074px;
+    padding: 0;
+	position: relative;
+	transform: translate(0, 3580px);
+}
+
+.image-block-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	overflow: visible;
+	max-height: 1074px;
+    height: 1074px;
+}
+
+.image-block-wrapper > picture > img {
+	object-fit: cover;
+	display: block;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+	aspect-ratio: 1175/1074;
+}
+
+
+/* images */
+.image-block-wrapper > picture {
+	position: absolute;
+	display: block;
+	width: 100%;
+	transition: all 300ms cubic-bezier(0.240, 0.260, 0.070, 0.720);
+}
+
+.image-block-wrapper > picture:first-of-type {
+	top: 0;
+	z-index: 5;
+	opacity: 1;
+}
+
+.image-block-wrapper > picture:nth-of-type(2) {
+	top: 0;
+	z-index: 4;
+	opacity: 1;
+}
+
+.image-block-wrapper > picture:nth-of-type(3) {
+	top: 0;
+	z-index: 3;
+	opacity: 1;
+}
+
+.image-block-wrapper > picture:last-of-type {
+	top: 0;
+	z-index: 2;
+	opacity: 1;
+}
+
+
+
+/* text blocks */
+
+/* typography */
+.vertical-scroll .text-block-wrapper {
+	position: absolute;
+    z-index: 10;
+    height: 447px;
+    width: 486px;
+    bottom: 300px;
+	top: 200px;
+	left: -300px;
+	transition: opacity 300ms cubic-bezier(0.240, 0.260, 0.070, 0.720);
+}
+
+.vertical-scroll .text-block-wrapper > div {
+	height: 415px;
+    width: 454px;
+	background-color: var(--white);
+	padding: 16px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: opacity 300ms cubic-bezier(0.240, 0.260, 0.070, 0.720);
+}
+
+.vertical-scroll .text-block-wrapper > div > h2 {
+    letter-spacing: 0.0094rem;
+    font-size: 5rem;
+    line-height: 4.25rem;
+	margin: 0;
+	font-weight: 600;
+	width: fit-content;
+	font-family: var(--mammoth-heading);
+}
+
+.text-block-wrapper > div > h3 {
+    font-size: 3.25rem;
+    line-height: 2.94rem;
+    text-transform: capitalize;
+	margin: 0;
+	grid-column: 1/span 6;
+	font-family: var(--mammoth-heading);
+}
+
+.text-block-wrapper > div > p:not(:first-of-type) {
+	margin: 0 0 -24px;
+	font-size: 1.125rem;
+    line-height: 1.75rem;
+    text-transform: capitalize;
+	font-weight: 700;
+    letter-spacing: 0.0493rem;
+	font-family: var(--mammoth-subheading);
+}
+
+.text-block-wrapper > div > p.button-container {
+	margin: 20px 0 0;
+	font-weight: 400;
+	grid-column: 1/ span 6;
+}
+
+/* icon wrapper */
+.text-block-wrapper > div > p:first-of-type {
+	grid-column: 1/ span 6;
+	margin: 0;
+}
+
+/* first and third blocks */
+.text-block-wrapper > div:first-of-type h2:first-of-type,
+.text-block-wrapper > div:first-of-type p:nth-of-type(2),
+.text-block-wrapper > div:nth-of-type(3) h2:first-of-type,
+.text-block-wrapper > div:nth-of-type(3) p:nth-of-type(2)  {
+	grid-column: 1/ span 6;
+}
+
+.text-block-wrapper > div:first-of-type h2:nth-of-type(2),
+.text-block-wrapper > div:first-of-type p:nth-of-type(3),
+.text-block-wrapper > div:nth-of-type(3) h2:nth-of-type(2),
+.text-block-wrapper > div:nth-of-type(3) p:nth-of-type(3) {
+	grid-column: 1/ span 2;
+}
+
+.text-block-wrapper > div:first-of-type h2:nth-of-type(3),
+.text-block-wrapper > div:nth-of-type(3) h2:nth-of-type(3),
+.text-block-wrapper > div:first-of-type p:nth-of-type(4),
+.text-block-wrapper > div:nth-of-type(3) p:nth-of-type(4) {
+	grid-column: 4/ span 3;
+}
+
+.text-block-wrapper > div:first-of-type p:nth-of-type(3),
+.text-block-wrapper > div:nth-of-type(3) p:nth-of-type(3),
+.text-block-wrapper > div:first-of-type p:nth-of-type(4),
+.text-block-wrapper > div:nth-of-type(3) p:nth-of-type(4) {
+	grid-row: 4;
+}
+
+/* last text block content layout */
+.text-block-wrapper > div:last-of-type p:not(:first-of-type, .button-container) {
+	grid-column: 1/ span 6;
+	margin-bottom: -24px;
+}
+
+.text-block-wrapper div:first-of-type {
+	z-index: 5;
+	opacity: 1;
+}
+
+.text-block-wrapper div:nth-of-type(2) {
+	z-index: 4;
+	opacity: 1;
+}
+
+.text-block-wrapper div:nth-of-type(3) {
+	z-index: 3;
+	opacity: 1;
+}
+
+.text-block-wrapper div:nth-of-type(4) {
+	z-index: 2;
+	opacity: 1;
+}
+
+@media(width <= 1280px){
+	.section > div.vertical-scroll-wrapper {
+		width: 828px;
+		height: 4651px;
+	}
+
+	.vertical-scroll > div:first-of-type {
+		margin: 0 0 0 420px;
+		max-width: 1175.04px;
+		width: 1175.04px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.section.vertical-scroll-container.fixed .vertical-scroll > div:first-of-type {
+		left: 420px;
+		top: -0.2813px;
+		margin: 0;
+		max-width: 851px;
+		width: 851px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.section.vertical-scroll-container.unfix .vertical-scroll > div:first-of-type {
+		margin: 0 0 0 420px;
+		max-width: 1175.04px;
+		width: 1175.04px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.image-block-wrapper > picture > img {
+		aspect-ratio: 851/1074;
+	}
+}
+
+
+@media(width <= 1024px){
+	.section > div.vertical-scroll-wrapper {
+		width: 828px;
+		height: 4683px;
+	}
+
+	.vertical-scroll > div:first-of-type {
+		margin: 0 0 0 348px;
+		max-width: 694px;
+		width: 694px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.section.vertical-scroll-container.fixed .vertical-scroll > div:first-of-type {
+		left: 348px;
+		top: -0.4297px;
+		margin: 0;
+		max-width: 694px;
+		width: 694px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.section.vertical-scroll-container.unfix .vertical-scroll > div:first-of-type {
+		margin: 0 0 0 348px;
+		max-width: 694px;
+		width: 694px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.image-block-wrapper > picture > img {
+		aspect-ratio: 694/1074;
+	}
+
+	.vertical-scroll .text-block-wrapper {
+        width: 354px;
+        height: 376px;
+        left: -270px;
+	}
+
+	.vertical-scroll .text-block-wrapper > div  {
+        width: 354px;
+        height: 376px;
+	}
+
+	.vertical-scroll .text-block-wrapper > div > h2 {
+		font-size: 2.75rem;
+        line-height: 2.55rem;
+	}
+
+	.vertical-scroll .text-block-wrapper > div > h3 {
+		font-size: 1.75rem;
+		line-height: 1.61rem;
+	}
+
+	.text-block-wrapper > div > p:not(:first-of-type) {
+		font-size: 0.875rem;
+		letter-spacing: 0.0493rem;
+	}
+}
+
+@media(width <= 767px){
+	.section > div.vertical-scroll-wrapper {
+		width: 767px;
+		height: 4651px;
+		padding: 0 0 3580px;
+	}
+	
+	.vertical-scroll > div:first-of-type {
+		margin-left: 0;
+		max-width: 767px;
+		width: 767px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.section.vertical-scroll-container.unfix .vertical-scroll > div:first-of-type,
+	.section.vertical-scroll-container.fixed .vertical-scroll > div:first-of-type {
+		left: 0;
+		margin-left: 0;
+		max-width: 767px;
+		width: 767px;
+		max-height: 1074px;
+		height: 1074px;
+	}
+
+	.vertical-scroll .text-block-wrapper {
+        width: 250px;
+        height: 376px;
+        left: 0;
+	}
+
+	.vertical-scroll .text-block-wrapper > div {
+		width: 250px;
+        height: 376px;
+	}
+}
+
