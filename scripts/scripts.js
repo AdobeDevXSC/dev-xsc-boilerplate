@@ -463,9 +463,9 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
-  decorateBlocks(main);
   scheduleSections(main);
   scheduleBlocks(main);
+  decorateBlocks(main);
 }
 
 /**
