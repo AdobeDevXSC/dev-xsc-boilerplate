@@ -3,9 +3,11 @@ import {
   decorateButtons,
   decorateIcons,
   decorateSections,
+  decorateBlock,
   decorateBlocks,
   decorateTemplateAndTheme,
   getMetadata,
+  loadBlock,
   loadCSS,
   loadHeader,
   loadFooter,
@@ -51,8 +53,6 @@ const pluginContext = {
   toCamelCase,
   toClassName,
 };
-
-
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -450,7 +450,6 @@ export function addElement(type, attributes, values = {}) {
 
   return element;
 }
-
 
 /**
  * Decorates the main element.
