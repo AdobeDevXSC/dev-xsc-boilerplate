@@ -20,19 +20,10 @@
   --white: white;
   --background-color: #fff;
 
-  /* brand colors */
-  --lenovo-red: #e1251b; /* need to update variable name */
-  --mammoth-blue: #0072B2; /* need to update variable name */
-  --mammoth-blue-hover: #00578E; /* need to update variable name */
-
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
-  --lenovo-font: lato, roboto-fallback; /* need to update variable name */
-  --mammoth-heading: itc-lubalin, serif; /* need to update variable name */
-  --mammoth-subheading: trade-gothic-next-condensed, sans-serif; /* need to update variable name */
-  --mammoth-body: trade-gothic-next, sans-serif; /* need to update variable name */
 
   /* body sizes */
   --body-font-size-m: 22px;
